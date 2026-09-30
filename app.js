@@ -424,8 +424,17 @@
   function toggleTheme(){mutate(s=>s.settings.theme=s.settings.theme==="dark"?"light":"dark")}
   function exportData(){
     const payload={app:"LifeOS",version:VERSION,exportedAt:new Date().toISOString(),data:state};
-    const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`lifeos-backup-${today()}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+    const filename=`lifeos-backup-${today()}.json`;
+    const text=JSON.stringify(payload,null,2);
+
+    if(window.Android?.saveText){
+      window.Android.saveText(filename,text);
+      toast("Android 저장창 열기");
+      return;
+    }
+
+    const blob=new Blob([text],{type:"application/json"});
+    const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=filename;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
     toast("백업 파일 생성");
   }
   async function importData(file){
@@ -454,6 +463,6 @@
     if(e.key==="Escape" && $("#commandDialog").open) $("#commandDialog").close();
   });
 
-  if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(console.warn));
+  if(location.protocol.startsWith("http") && "serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(console.warn));
   render();
 })();
