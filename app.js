@@ -338,7 +338,7 @@
       mutate(s=>s.expenses.push({id:uid(),title:String(fd.get("title")).trim(),amount,category:String(fd.get("category")),date:String(fd.get("date")),createdAt:Date.now()}),"지출 기록 완료");
     });
 
-    $$("[data-task-toggle]").forEach(b=>b.onclick=()=>mutate(s=>{const t=s.tasks.find(x=>x.id===b.dataset.taskToggle);if(t){t.done=!t.done;t.doneAt=t.done?new Date().toISOString():null}}));
+    $$("[data-task-toggle]").forEach(b=>b.onclick=()=>mutate(s=>{const t=s.tasks.find(x=>x.id===b.dataset.taskToggle);if(t){t.done=!t.done;t.doneAt=t.done?today():null}}));
     $$("[data-task-delete]").forEach(b=>b.onclick=()=>mutate(s=>s.tasks=s.tasks.filter(x=>x.id!==b.dataset.taskDelete),"삭제됨"));
     $$("[data-task-filter]").forEach(b=>b.onclick=()=>{taskFilter=b.dataset.taskFilter;render()});
     $$("[data-habit]").forEach(b=>b.onclick=()=>mutate(s=>{s.habitChecks[b.dataset.habit] ||= {}; s.habitChecks[b.dataset.habit][b.dataset.date]=!s.habitChecks[b.dataset.habit][b.dataset.date]}));
@@ -416,8 +416,8 @@
     const d=$("#commandDialog");d.showModal();$("#commandInput").value="";renderCommands("");setTimeout(()=>$("#commandInput").focus(),0);
   }
   function renderCommands(q){
-    const rows=commands.map(c=>({...c,score:q?fuzzy(q,c.name):0})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score);
-    $("#commandResults").innerHTML=rows.map((c,i)=>`<button type="button" class="command-result ${i===0?"active":""}" data-command="${commands.indexOf(c)}"><span>${esc(c.name)}</span><span>${esc(c.hint)}</span></button>`).join("");
+    const rows=commands.map((c,_index)=>({...c,_index,score:q?fuzzy(q,c.name):0})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score);
+    $("#commandResults").innerHTML=rows.map((c,i)=>`<button type="button" class="command-result ${i===0?"active":""}" data-command="${c._index}"><span>${esc(c.name)}</span><span>${esc(c.hint)}</span></button>`).join("");
     $$("[data-command]").forEach(b=>b.onclick=()=>{const c=commands[Number(b.dataset.command)];$("#commandDialog").close();c.run()});
   }
 
