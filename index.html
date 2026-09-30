@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0f17" />
+  <meta name="description" content="LifeOS — 서버 없이 브라우저에서 바로 쓰는 개인 생활 대시보드" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="stylesheet" href="./styles.css" />
+  <title>LifeOS</title>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark">L</div>
+        <div><strong>LifeOS</strong><span>offline personal dashboard</span></div>
+      </div>
+      <nav id="nav" class="nav">
+        <button class="nav-item active" data-view="today">⌂ <span>오늘</span></button>
+        <button class="nav-item" data-view="tasks">✓ <span>할 일</span></button>
+        <button class="nav-item" data-view="habits">↻ <span>습관</span></button>
+        <button class="nav-item" data-view="notes">✎ <span>메모</span></button>
+        <button class="nav-item" data-view="money">₩ <span>지출</span></button>
+        <button class="nav-item" data-view="focus">◉ <span>집중</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <button id="exportBtn" class="ghost">내보내기</button>
+        <label class="ghost file-label">가져오기<input id="importInput" type="file" accept="application/json" /></label>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <div class="eyebrow" id="dateLabel"></div>
+          <h1 id="viewTitle">오늘</h1>
+        </div>
+        <div class="top-actions">
+          <button id="commandBtn" class="command-hint">⌘K <span>빠른 실행</span></button>
+          <button id="themeBtn" class="icon-btn" aria-label="테마 전환">☼</button>
+        </div>
+      </header>
+
+      <section id="view" class="view"></section>
+    </main>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <dialog id="commandDialog" class="command-dialog">
+    <form method="dialog">
+      <input id="commandInput" autocomplete="off" placeholder="무엇을 할까요? 예: 할 일 추가, 타이머 25분" />
+      <div id="commandResults" class="command-results"></div>
+    </form>
+  </dialog>
+
+  <template id="emptyTpl">
+    <div class="empty">
+      <div class="empty-icon">◇</div>
+      <strong>아직 아무것도 없음</strong>
+      <span>하나 추가해보자.</span>
+    </div>
+  </template>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
