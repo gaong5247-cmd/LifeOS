@@ -55,3 +55,22 @@ python -m http.server 8080
 ## License
 
 MIT
+
+
+## Android APK
+
+Android 8.0(API 26) 이상을 지원합니다.
+
+APK는 GitHub Actions의 **Build Android APK** 워크플로에서 자동 빌드됩니다.
+성공한 실행의 Artifact **LifeOS-Android-APK** 안에 `LifeOS-v1.0.0.apk`가 생성됩니다.
+
+Android 앱은 원격 웹사이트를 띄우지 않습니다. 빌드 시 현재 웹 파일을 APK의
+`assets/www` 안으로 복사한 뒤 로컬 WebView에서 실행합니다.
+
+패키지 ID:
+
+```
+com.gaong.lifeos
+```
+
+웹의 JSON 백업 기능은 Android에서는 시스템 파일 저장창으로 연결됩니다.
