@@ -1,0 +1,39 @@
+name: LifeOS CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: JavaScript syntax
+        run: |
+          node --check app.js
+          node --check sw.js
+
+      - name: Required files
+        run: |
+          test -f index.html
+          test -f styles.css
+          test -f components.css
+          test -f extras.css
+          test -f mobile.css
+          test -f manifest.webmanifest
+
+      - name: Static server smoke test
+        run: |
+          python3 -m http.server 4173 >/tmp/lifeos-http.log 2>&1 &
+          SERVER_PID=$!
+          trap "kill $SERVER_PID" EXIT
+          sleep 2
+          curl --fail --silent http://127.0.0.1:4173/ | grep -q "LifeOS"
+          curl --fail --silent http://127.0.0.1:4173/app.js | grep -q "STORAGE_KEY"
+          curl --fail --silent http://127.0.0.1:4173/styles.css >/dev/null
