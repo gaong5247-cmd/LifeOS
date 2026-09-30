@@ -31,3 +31,25 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 }
+
+
+def webSourceRoot = rootProject.projectDir.parentFile
+def webAssetsDir = file("src/main/assets/www")
+
+tasks.register("syncLifeOsWeb", Copy) {
+    from(webSourceRoot) {
+        include "index.html"
+        include "app.js"
+        include "styles.css"
+        include "components.css"
+        include "extras.css"
+        include "mobile.css"
+        include "manifest.webmanifest"
+        include "sw.js"
+    }
+    into(webAssetsDir)
+}
+
+tasks.named("preBuild").configure {
+    dependsOn("syncLifeOsWeb")
+}
